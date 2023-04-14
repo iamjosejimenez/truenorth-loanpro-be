@@ -1,0 +1,58 @@
+service: loanpro-be
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-prune-plugin
+  - serverless-python-requirements
+  - serverless-wsgi
+
+useDotenv: true
+
+custom:
+  dotenv:
+    basePath: ./
+    logging: true
+  pythonRequirements:
+    dockerizePip: non-linux
+    zip: true
+    fileName: requirements.txt
+  stage: production
+  wsgi:
+    app: loanpro_be.wsgi.application
+    packRequirements: false
+  prune:
+    automatic: true
+    number: 3
+
+functions:
+  - app:
+      handler: wsgi_handler.handler
+      events:
+        - http: ANY /
+        - http: ANY /{proxy+}
+      timeout: 30
+
+provider:
+  name: aws
+  region: us-east-2
+  runtime: python3.9
+  versionFunctions: false
+  stage: production
+  timeout: 60
+  deploymentBucket:
+    name: ${env:DEPLOYMENT_BUCKET}
+  apiGateway:
+    shouldStartNameWithService: true
+
+package:
+  individually:
+    true
+  exclude:
+    - .env
+    - .git/**
+    - .github/**
+    - .serverless/**
+    - static/**
+    - .cache/**
+    - .pytest_cache/**
+    - node_modules/**
