@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "drf_spectacular",
     "user",
+    "operation",
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,34 @@ REST_FRAMEWORK = {
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 AUTH_USER_MODEL = "core.User"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "console": {
+            # exact format is not important, this is the minimum information
+            "format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "console",
+        },
+    },
+    "loggers": {
+        "": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+        },
+    },
+}
+
+# Operations cost default value
+ADDITION_COST = env.float("ADDITION_COST", 1.23)
+SUBTRACTION_COST = env.float("SUBTRACTION_COST", 0.99)
+MULTIPLICATION_COST = env.float("MULTIPLICATION_COST", 2.10)
+DIVISION_COST = env.float("DIVISION_COST", 3.14)
+SQUARE_ROOT_COST = env.float("SQUARE_ROOT_COST", 4.99)
+RANDOM_STRING_COST = env.float("RANDOM_STRING_COST", 9.99)

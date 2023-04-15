@@ -15,7 +15,11 @@ class Operation(CustomBaseModel):
         SQUARE_ROOT = "SQUARE_ROOT", _("Square Root")
         RANDOM_STRING = "RANDOM_STRING", _("Random String")
 
-    type = models.CharField(max_length=14, choices=OperationType.choices)
+    type = models.CharField(
+        max_length=14,
+        choices=OperationType.choices,
+        unique=True,
+    )
     cost = models.FloatField()
 
     objects = CustomAppManager()
