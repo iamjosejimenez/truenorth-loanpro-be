@@ -6,8 +6,10 @@ from django.contrib.auth.models import (
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from .base import CustomAppManager, CustomBaseModel
 
-class UserManager(BaseUserManager):
+
+class UserManager(CustomAppManager, BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("User must have an email.")
@@ -27,7 +29,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(CustomBaseModel, AbstractBaseUser, PermissionsMixin):
     class UserStatus(models.TextChoices):
         ACTIVE = "ACTIVE", _("Active")
         INACTIVE = "INACTIVE", _("Inactive")
