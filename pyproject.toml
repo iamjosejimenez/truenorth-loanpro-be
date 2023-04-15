@@ -13,8 +13,16 @@ psycopg2-binary = "^2.9.6"
 collectfast = "^2.2.0"
 boto3 = "^1.26.114"
 werkzeug = "1.0.1"
+djangorestframework = "^3.14.0"
+markdown = "^3.4.3"
+django-filter = "^23.1"
+black = "^23.3.0"
+isort = "^5.12.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
