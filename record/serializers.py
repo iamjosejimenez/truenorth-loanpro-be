@@ -13,6 +13,7 @@ class RecordDetailSerializer(serializers.ModelSerializer):
             "user_balance",
             "amount",
             "operation_type",
+            "operation_input",
         )
         read_only_fields = (
             "id",
@@ -25,4 +26,10 @@ class RecordDetailSerializer(serializers.ModelSerializer):
     operation_type = serializers.ChoiceField(
         choices=Operation.OperationType.choices,
         write_only=True,
+    )
+
+    operation_input = serializers.ListField(
+        child=serializers.FloatField(),
+        write_only=True,
+        max_length=2,
     )
