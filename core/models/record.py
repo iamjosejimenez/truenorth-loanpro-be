@@ -8,16 +8,17 @@ from .base import CustomAppManager, CustomBaseModel
 class Record(CustomBaseModel):
     """Record object."""
 
-    operation_id = models.ForeignKey(
-        "core.operation",
+    operation = models.ForeignKey(
+        "core.Operation",
         on_delete=models.CASCADE,
     )
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
     amount = models.FloatField()
     user_balance = models.FloatField()
     operation_response = models.CharField(max_length=32)
-    data = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
+
     objects = CustomAppManager()
