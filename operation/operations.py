@@ -72,7 +72,6 @@ class RandomStringHanlder(OperationHanlder):
 
         response = requests.get(base_url, params=params)
         response_content = response.text.strip()
-        print(response.status_code)
         if response.status_code == 200:
             return response_content
 
