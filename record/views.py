@@ -10,35 +10,37 @@ from operation.operations import execute_operation
 from record import serializers
 
 
-# Create your views here.
-class RecordViewSet(
-    mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet
-):
-    """View for create and list record API."""
+class BaseRecordViewSet(viewsets.GenericViewSet):
+    """Base view with utilities for other view sets"""
 
-    serializer_class = serializers.RecordDetailSerializer
     queryset = Record.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user).order_by("-id")
+        return self.queryset.filter(user=self.request.user).order_by("-date")
 
-    def __get_user_current_balance(self):
+    def get_user_balance(self):
         queryset = self.get_queryset()
-        latest_record = queryset.latest("date")
+        latest_record = queryset.first()
 
         if not latest_record:
             return settings.DEFAULT_USER_BALANCE
 
         return latest_record.user_balance
 
+
+class RecordViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, BaseRecordViewSet):
+    """View for create and list record API."""
+
+    serializer_class = serializers.RecordDetailSerializer
+
     def perform_create(self, serializer):
         operation_type = serializer.validated_data.pop("operation_type")
         operation = Operation.objects.get(
             type=operation_type,
         )
-        user_balance = self.__get_user_current_balance()
+        user_balance = self.get_user_balance()
         new_balance = user_balance - operation.cost
         if new_balance < 0:
             raise ValidationError(_("Insufficient user balance to perform operation."))

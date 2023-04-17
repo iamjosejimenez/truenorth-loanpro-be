@@ -39,3 +39,8 @@ class AuthTokenSerializer(serializers.Serializer):
             raise serializers.ValidationError(msg, code="authorization")
         attrs["user"] = user
         return attrs
+
+
+class DetailBalanceSerializer(serializers.Serializer):
+    user_balance = serializers.FloatField()
+    read_only_fields = ("user_balance",)
