@@ -61,7 +61,7 @@ class RandomStringHanlder(OperationHanlder):
         base_url = "https://www.random.org/strings/"
         params = {
             "num": 1,
-            "len": 16,
+            "len": 8,
             "digits": "on",
             "upperalpha": "on",
             "loweralpha": "on",
