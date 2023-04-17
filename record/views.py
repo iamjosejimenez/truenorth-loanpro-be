@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from core.models import Operation, Record
 from operation.operations import execute_operation
 from record import serializers
+from core.pagination import CustomPagination
 
 
 class BaseRecordViewSet(viewsets.GenericViewSet):
@@ -34,6 +35,7 @@ class RecordViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, BaseRecordVi
     """View for create and list record API."""
 
     serializer_class = serializers.RecordDetailSerializer
+    pagination_class = CustomPagination
 
     def perform_create(self, serializer):
         operation_type = serializer.validated_data.pop("operation_type")
