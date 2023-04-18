@@ -1,15 +1,14 @@
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-from rest_framework import mixins, viewsets
+from rest_framework import filters, mixins, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
 from core.models import Operation, Record
+from core.pagination import CustomPagination
 from operation.operations import execute_operation
 from record import serializers
-from core.pagination import CustomPagination
-from rest_framework import filters
 
 
 class BaseRecordViewSet(viewsets.GenericViewSet):

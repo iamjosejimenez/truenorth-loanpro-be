@@ -1,13 +1,11 @@
 from rest_framework import generics, mixins
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.settings import api_settings
-from record.views import BaseRecordViewSet
-from core.models import User
-from user.serializers import (
-    AuthTokenSerializer,
-    UserSerializer,
-)
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
+
+from core.models import User
+from record.views import BaseRecordViewSet
+from user.serializers import AuthTokenSerializer, UserSerializer
 
 
 class ListCreateUserView(generics.ListCreateAPIView):
