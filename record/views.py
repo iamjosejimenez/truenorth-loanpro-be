@@ -9,6 +9,7 @@ from core.models import Operation, Record
 from operation.operations import execute_operation
 from record import serializers
 from core.pagination import CustomPagination
+from rest_framework import filters
 
 
 class BaseRecordViewSet(viewsets.GenericViewSet):
@@ -36,6 +37,15 @@ class RecordViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, BaseRecordVi
 
     serializer_class = serializers.RecordDetailSerializer
     pagination_class = CustomPagination
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
+    ordering_fields = "__all__"
+    search_fields = [
+        "operation_response",
+        "date",
+        "amount",
+        "operation__type",
+        "user_balance",
+    ]
 
     def perform_create(self, serializer):
         operation_type = serializer.validated_data.pop("operation_type")

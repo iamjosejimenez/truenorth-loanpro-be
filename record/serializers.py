@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from core.models import Operation, Record
+from operation.serializers import OperationSerializer
 
 
 class RecordDetailSerializer(serializers.ModelSerializer):
@@ -14,6 +15,7 @@ class RecordDetailSerializer(serializers.ModelSerializer):
             "amount",
             "operation_type",
             "operation_input",
+            "operation",
         )
         read_only_fields = (
             "id",
@@ -21,6 +23,7 @@ class RecordDetailSerializer(serializers.ModelSerializer):
             "date",
             "user_balance",
             "amount",
+            "operation",
         )
 
     operation_type = serializers.ChoiceField(
@@ -33,3 +36,5 @@ class RecordDetailSerializer(serializers.ModelSerializer):
         write_only=True,
         max_length=2,
     )
+
+    operation = OperationSerializer(read_only=True)
