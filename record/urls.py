@@ -9,5 +9,5 @@ router.register("", views.RecordViewSet)
 app_name = "record"
 
 urlpatterns = [
-    path("", include(router.urls), name="base-record-path"),
+    path("", include(router.urls)),
 ]

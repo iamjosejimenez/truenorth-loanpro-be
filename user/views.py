@@ -3,9 +3,13 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
-from core.models import User
+from core.pagination import CustomPagination
 from record.views import BaseRecordViewSet
-from user.serializers import AuthTokenSerializer, UserSerializer
+from user.serializers import (
+    AuthTokenSerializer,
+    DetailBalanceSerializer,
+    UserSerializer,
+)
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -21,9 +25,8 @@ class CreateTokenView(ObtainAuthToken):
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
 
-class BalanceViewSet(BaseRecordViewSet):
-    """Create a new auth token for the user."""
+class BalanceViewSet(mixins.ListModelMixin, BaseRecordViewSet):
+    """Returns current balance for the authenticated user."""
 
-    def list(self, _request):
-        user_balance = self.get_user_balance()
-        return Response({"user_balance": user_balance})
+    serializer_class = DetailBalanceSerializer
+    pagination_class = CustomPagination

@@ -1,3 +1,7 @@
+"""
+Tests for the record API.
+"""
+from django import urls
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -8,6 +12,7 @@ from core.models import Operation, Record
 from record.serializers import RecordDetailSerializer
 
 RECORD_URL = reverse("record:record-list")
+BALANCE_URL = f"{reverse('user:create')}balances/"
 
 
 def create_record(
@@ -116,3 +121,23 @@ class PtivateRecordApiTests(TestCase):
 
         res = self.client.get(RECORD_URL)
         self.assertEqual(res.data["count"], 0)
+
+    def test_create_record_updates_balance(self):
+        """Test creating a new record logic"""
+        payload_1 = {
+            "operation_type": self.operation_1.type.value,
+            "operation_input": [2, 3],
+        }
+        res_1 = self.client.post(RECORD_URL, payload_1)
+        self.assertEqual(res_1.status_code, status.HTTP_201_CREATED)
+        payload_2 = {
+            "operation_type": self.operation_2.type.value,
+            "operation_input": [8, 1],
+        }
+        res_2 = self.client.post(RECORD_URL, payload_2)
+        self.assertEqual(res_2.status_code, status.HTTP_201_CREATED)
+
+        self.assertEqual(
+            res_2.data["user_balance"],
+            res_1.data["user_balance"] - self.operation_2.cost,
+        )

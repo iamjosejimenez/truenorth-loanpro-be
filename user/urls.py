@@ -6,10 +6,10 @@ from user import views
 app_name = "user"
 
 router = DefaultRouter()
-router.register("", views.BalanceViewSet)
+router.register("balances", views.BalanceViewSet, basename="balances")
 
 urlpatterns = [
     path("", views.CreateUserView.as_view(), name="create"),
+    path("", include((router.urls, "balances"), namespace="balances"), name="balance"),
     path("token/", views.CreateTokenView.as_view(), name="token"),
-    path("balance/", include(router.urls)),
 ]
