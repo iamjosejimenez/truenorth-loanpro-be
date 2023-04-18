@@ -8,9 +8,10 @@ from record.views import BaseRecordViewSet
 from user.serializers import AuthTokenSerializer, UserSerializer
 
 
-class ListCreateUserView(generics.ListCreateAPIView):
+class CreateUserView(generics.CreateAPIView):
+    """Create a new user view"""
+
     serializer_class = UserSerializer
-    queryset = User.objects.all()
 
 
 class CreateTokenView(ObtainAuthToken):

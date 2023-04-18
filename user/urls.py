@@ -9,7 +9,7 @@ router = DefaultRouter()
 router.register("", views.BalanceViewSet)
 
 urlpatterns = [
-    path("", views.ListCreateUserView.as_view(), name="create"),
+    path("", views.CreateUserView.as_view(), name="create"),
     path("token/", views.CreateTokenView.as_view(), name="token"),
     path("balance/", include(router.urls)),
 ]

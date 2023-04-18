@@ -43,6 +43,10 @@ class User(CustomBaseModel, AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    @property
+    def is_user_active(self):
+        return self.status == User.UserStatus.ACTIVE
+
     objects = UserManager()
 
     USERNAME_FIELD = "email"

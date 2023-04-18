@@ -7,47 +7,47 @@ import requests
 from core.models import Operation
 
 
-class OperationHanlder(ABC):
+class OperationHandler(ABC):
     def execute():
         pass
 
 
-class AdditionHanlder(OperationHanlder):
+class AdditionHandler(OperationHandler):
     def execute(self, arguments):
         return sum(arguments)
 
 
-class SubtractionHandler(OperationHanlder):
+class SubtractionHandler(OperationHandler):
     def execute(self, arguments):
         return reduce(lambda x, y: x - y, arguments)
 
 
-class MultiplyHanlder(OperationHanlder):
+class MultiplyHandler(OperationHandler):
     def execute(self, arguments):
         return math.prod(arguments)
 
 
-class DivisionHanlder(OperationHanlder):
+class DivisionHandler(OperationHandler):
     def execute(self, arguments):
         return reduce(lambda x, y: x / y, arguments)
 
 
-class SquareRootHanlder(OperationHanlder):
+class SquareRootHanlder(OperationHandler):
     def execute(self, arguments):
         return math.sqrt(arguments[0])
 
 
-class RandomStringHanlder(OperationHanlder):
+class RandomStringHandler(OperationHandler):
     """Random string generation operation"""
 
-    class RandomStringOperationError(Exception):
+    class RandomStringOperationException(Exception):
         """Exception raised when external service's quota is exceeded"""
 
         def __init__(self, message="External service quota exceeded") -> None:
             self.message = message
             super().__init__(self.message)
 
-    class QuotaExceededError(Exception):
+    class QuotaExceededException(Exception):
         """Exception raised when external service's quota is exceeded"""
 
         def __init__(self, message="External service quota exceeded") -> None:
@@ -76,18 +76,18 @@ class RandomStringHanlder(OperationHanlder):
             return response_content
 
         if response.status_code == 503:
-            raise RandomStringHanlder.RandomStringOperationError()
+            raise RandomStringHandler.QuotaExceededException()
 
-        raise RandomStringHanlder.RandomStringOperationError(response_content)
+        raise RandomStringHandler.RandomStringOperationException(response_content)
 
 
 OPERATION_TYPE_2_HANDLER = {
-    Operation.OperationType.ADDITION: AdditionHanlder,
+    Operation.OperationType.ADDITION: AdditionHandler,
     Operation.OperationType.SUBTRACTION: SubtractionHandler,
-    Operation.OperationType.MULTIPLICATION: MultiplyHanlder,
-    Operation.OperationType.DIVISION: DivisionHanlder,
+    Operation.OperationType.MULTIPLICATION: MultiplyHandler,
+    Operation.OperationType.DIVISION: DivisionHandler,
     Operation.OperationType.SQUARE_ROOT: SquareRootHanlder,
-    Operation.OperationType.RANDOM_STRING: RandomStringHanlder,
+    Operation.OperationType.RANDOM_STRING: RandomStringHandler,
 }
 
 
