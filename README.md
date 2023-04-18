@@ -1,11 +1,3 @@
-README
-
-export DJANGO_READ_DOT_ENV_FILE=False
-
-export DJANGO_SETTINGS_MODULE=loanpro_be.local
-
-poetry run python manage.py load_default_data
-
 # Introduction
 
 Django based backend solution to **truenorth loanpro challenge**, made by José Luis Jiménez. Live version can be found [here](https://rr4llqyhrl.execute-api.us-east-2.amazonaws.com/production/api/docs/). Deployed serverless using AWS lambdas.
