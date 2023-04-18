@@ -23,12 +23,10 @@ class BaseRecordViewSet(viewsets.GenericViewSet):
 
     def get_user_balance(self):
         queryset = self.get_queryset()
-        latest_record = queryset.first()
-
-        if not latest_record:
+        if not queryset:
             return settings.DEFAULT_USER_BALANCE
 
-        return latest_record.user_balance
+        return queryset.first().user_balance
 
 
 class RecordViewSet(
