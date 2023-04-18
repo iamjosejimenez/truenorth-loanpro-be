@@ -32,20 +32,27 @@ class BaseRecordViewSet(viewsets.GenericViewSet):
         return latest_record.user_balance
 
 
-class RecordViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, BaseRecordViewSet):
+class RecordViewSet(
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    BaseRecordViewSet,
+):
     """View for create and list record API."""
 
     serializer_class = serializers.RecordDetailSerializer
     pagination_class = CustomPagination
     filter_backends = [filters.OrderingFilter, filters.SearchFilter]
-    ordering_fields = "__all__"
-    search_fields = [
+    __fields = [
+        "id",
         "operation_response",
         "date",
         "amount",
         "operation__type",
         "user_balance",
     ]
+    ordering_fields = __fields
+    search_fields = __fields
 
     def perform_create(self, serializer):
         operation_type = serializer.validated_data.pop("operation_type")
