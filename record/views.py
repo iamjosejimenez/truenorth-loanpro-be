@@ -8,7 +8,9 @@ from rest_framework.permissions import IsAuthenticated
 from core.models import Operation, Record
 from core.pagination import CustomPagination
 from operation.commands import execute_operation
+from operation.exceptions import InvalidCommandInput, RandomStringOperationException
 from record import serializers
+from record.exceptions import InvalidOperationApiException
 
 
 class BaseRecordViewSet(viewsets.GenericViewSet):
@@ -62,10 +64,14 @@ class RecordViewSet(
             raise ValidationError(_("Insufficient user balance to perform operation."))
 
         operation_input = serializer.validated_data.pop("operation_input")
-        operation_response = execute_operation(
-            operation_type=operation_type,
-            arguments=operation_input,
-        )
+
+        try:
+            operation_response = execute_operation(
+                operation_type=operation_type,
+                arguments=operation_input,
+            )
+        except (InvalidCommandInput, RandomStringOperationException) as e:
+            raise InvalidOperationApiException(detail=e.message)
 
         serializer.save(
             user=self.request.user,
