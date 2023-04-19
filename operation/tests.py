@@ -11,6 +11,7 @@ from operation.commands import (
     SquareRootCommand,
     SubtractionCommand,
 )
+from operation.exceptions import InvalidCommandInput, RandomStringOperationException
 
 # Create your tests here.
 
@@ -42,7 +43,7 @@ class OperationsCommandTests(SimpleTestCase):
         """Test division command"""
 
         self.assertRaises(
-            OperationCommand.InvalidInput,
+            InvalidCommandInput,
             DivisionCommand().execute,
             [10, 0],
         )
@@ -56,7 +57,7 @@ class OperationsCommandTests(SimpleTestCase):
         """Test sqrt command with invalid input"""
 
         self.assertRaises(
-            OperationCommand.InvalidInput,
+            InvalidCommandInput,
             SquareRootCommand().execute,
             [10, 100],
         )
@@ -79,7 +80,7 @@ class OperationsCommandTests(SimpleTestCase):
         mock_request.get().status_code = 503
 
         self.assertRaises(
-            RandomStringCommand.QuotaExceededException,
+            RandomStringOperationException,
             RandomStringCommand().execute,
             [],
         )
@@ -92,7 +93,7 @@ class OperationsCommandTests(SimpleTestCase):
         mock_request.get().status_code = 400
 
         self.assertRaises(
-            RandomStringCommand.RandomStringOperationException,
+            RandomStringOperationException,
             RandomStringCommand().execute,
             [],
         )
@@ -101,7 +102,7 @@ class OperationsCommandTests(SimpleTestCase):
         """Test invalid input for random string command"""
 
         self.assertRaises(
-            OperationCommand.InvalidInput,
+            InvalidCommandInput,
             RandomStringCommand().execute,
             [1234],
         )
