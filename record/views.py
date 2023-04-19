@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from core.models import Operation, Record
 from core.pagination import CustomPagination
-from operation.operations import execute_operation
+from operation.commands import execute_operation
 from record import serializers
 
 
