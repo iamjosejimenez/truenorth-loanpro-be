@@ -141,3 +141,27 @@ class PtivateRecordApiTests(TestCase):
             res_2.data["user_balance"],
             res_1.data["user_balance"] - self.operation_2.cost,
         )
+
+    def test_create_addition_record(self):
+        """Test creating a new record logic"""
+        payload_1 = {
+            "operation_type": self.operation_1.type.value,
+            "operation_input": ["3.0", "9"],
+        }
+        res_1 = self.client.post(RECORD_URL, payload_1)
+
+        self.assertEqual(res_1.data["operation_response"], "12.0")
+
+    def test_division_by_zero(self):
+        """Test creating a new record logic"""
+        Operation.objects.create(
+            type=Operation.OperationType.DIVISION,
+            cost=1.00,
+        )
+        payload = {
+            "operation_type": Operation.OperationType.DIVISION,
+            "operation_input": ["1.0", "0.0"],
+        }
+        res = self.client.post(RECORD_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
